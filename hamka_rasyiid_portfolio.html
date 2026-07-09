@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamka Rasyiid | Portofolio</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        // Cek preferensi tema untuk mencegah kedipan saat dimuat
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316', // Orange theme based on PPT
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Global Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        /* Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.2);
+        }
+
+        /* Custom Scrollbar for Modal */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569; 
+        }
+
+        /* Modal Animation */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-animate {
+            animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 antialiased selection:bg-brand-500 selection:text-white transition-colors duration-300">
+
+    <nav class="fixed w-full z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm dark:border-b dark:border-gray-800 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#home" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 cursor-pointer">
+                    <span class="text-2xl font-bold text-gray-900 dark:text-white">Hamka<span class="text-brand-500">.</span></span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-gray-600 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 font-medium transition-colors">About</a>
+                    <a href="#journey" class="text-gray-600 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 font-medium transition-colors">Journey</a>
+                    <a href="#skills" class="text-gray-600 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 font-medium transition-colors">Skills</a>
+                    <a href="#portofolio" class="text-gray-600 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 font-medium transition-colors">Portofolio</a>
+                    
+                    <!-- Theme Toggle Button (Desktop) -->
+                    <button id="theme-toggle-desktop" class="text-gray-500 dark:text-gray-400 hover:text-brand-500 dark:hover:text-brand-400 focus:outline-none transition-colors">
+                        <i class="fas fa-moon text-xl dark:hidden block"></i>
+                        <i class="fas fa-sun text-xl hidden dark:block text-brand-400"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button & Theme Toggle -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button id="theme-toggle-mobile" class="text-gray-500 dark:text-gray-400 hover:text-brand-500 dark:hover:text-brand-400 focus:outline-none transition-colors">
+                        <i class="fas fa-moon text-xl dark:hidden block"></i>
+                        <i class="fas fa-sun text-xl hidden dark:block text-brand-400"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300 hover:text-brand-500 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 shadow-lg">
+                <a href="#about" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 font-medium rounded-md">About</a>
+                <a href="#journey" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 font-medium rounded-md">Journey</a>
+                <a href="#skills" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 font-medium rounded-md">Skills</a>
+                <a href="#portofolio" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-brand-500 dark:hover:text-brand-400 font-medium rounded-md">Portofolio</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="px-4 pt-20 pb-20 min-h-screen flex items-center transition-colors duration-300">
+        <div class="max-w-7xl mx-auto text-center w-full">
+            <h2 class="text-brand-500 font-semibold tracking-wide uppercase text-sm mb-4">Hello, I am</h2>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white mb-6">
+                Hamka Rasyiid <br class="hidden md:block" /> Putra Widodo
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-8 max-w-4xl mx-auto font-medium">
+                <span class="text-gray-800 dark:text-gray-200">Software Quality Assurance</span> &bull;
+                <span class="text-gray-800 dark:text-gray-200">System Analyst</span> &bull;
+                <span class="text-gray-800 dark:text-gray-200">Business Analyst</span> 
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="#portofolio" class="bg-brand-500 hover:bg-brand-600 text-white px-8 py-3 rounded-full font-medium transition-all shadow-lg shadow-brand-500/30">
+                    View Portofolio
+                </a>
+                <a href="#about" class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-white border border-gray-200 dark:border-gray-700 px-8 py-3 rounded-full font-medium transition-all shadow-sm">
+                    About Me
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 bg-white dark:bg-gray-950 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-brand-500 rounded-2xl transform translate-x-4 translate-y-4 opacity-20"></div>
+                    <img src="assets/profile.jpeg" alt="Hamka Rasyiid" class="relative rounded-2xl shadow-xl w-full h-auto object-cover border-4 border-white dark:border-gray-800 z-10 aspect-[4/5] transition-colors duration-300">
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Introduction</h2>
+                    <div class="w-20 h-1 bg-brand-500 mb-6 rounded-full"></div>
+                    <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-6">
+                        I am a <strong class="text-gray-900 dark:text-gray-200">fresh graduate with a Bachelor’s degree in Information Systems</strong> and a strong interest in Software Quality Assurance, System Analysis, and Business Analysis. I have hands-on experience in requirement analysis, manual testing, system documentation, and supporting ERP implementation processes, with a solid understanding of business processes and software development life cycles. 
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-6">
+                        Beyond academics, I served as Chairman of the Faculty Student Senate, where I developed leadership, strategic planning, teamwork, and communication skills while leading organizational initiatives and collaborating with diverse stakeholders. 
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+                        My professional experience includes a data processing internship at Bakrie Center Foundation and an ERP implementation internship at BOSNET Distribution Indonesia, where I contributed to client support, system troubleshooting, user training, and business process implementation. I am eager to continue developing my skills and contribute to building reliable, user-oriented digital solutions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="journey" class="py-20 bg-brand-50 dark:bg-gray-900/50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">My Journey</h2>
+                <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center">
+                        <i class="fas fa-briefcase text-brand-500 mr-3"></i> Work Experiences
+                    </h3>
+                    <div class="relative border-l-2 border-brand-200 dark:border-gray-700 ml-3 space-y-10">
+                        
+                        <div class="relative pl-8">
+                            <div class="absolute w-4 h-4 bg-brand-500 rounded-full -left-[9px] top-1 border-4 border-brand-50 dark:border-gray-900 transition-colors duration-300"></div>
+                            <span class="text-sm font-bold text-brand-600 dark:text-brand-400 bg-brand-100 dark:bg-brand-900/30 px-3 py-1 rounded-full inline-block mb-2 transition-colors duration-300">Apr 2026 - Present</span>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">IT Implementor Intern - BOSNET Distribution Indonesia</h4>
+                            <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mt-2 space-y-1">
+                                <li>Supported troubleshooting and issue resolution related to ERP system, database, and application operations under senior implementer guidance.</li>
+                                <li>Assisted in handling client support cases, including recalibrating system location configurations based on application requirements.</li>
+                                <li>Delivered end-user training during ERP rollout to ensure users understood system features, business workflows, and daily operational processes.</li>
+                            </ul>
+                        </div>
+
+                        <div class="relative pl-8">
+                            <div class="absolute w-4 h-4 bg-brand-500 rounded-full -left-[9px] top-1 border-4 border-brand-50 dark:border-gray-900 transition-colors duration-300"></div>
+                            <span class="text-sm font-bold text-brand-600 dark:text-brand-400 bg-brand-100 dark:bg-brand-900/30 px-3 py-1 rounded-full inline-block mb-2 transition-colors duration-300">Sep 2024 - Dec 2024</span>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">IT Developer Intern - Bakrie Center Foundation</h4>
+                            <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mt-2 space-y-1">
+                                <li>Managed and validated TB case data within an information system to ensure data accuracy and system reliability.</li>
+                                <li>Conducted monthly data visualization reports for TB case trends.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Organizational Experience Timeline -->
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center">
+                        <i class="fas fa-graduation-cap text-brand-500 mr-3"></i> Education
+                    </h3>
+                    <div class="relative border-l-2 border-brand-200 dark:border-gray-700 ml-3 space-y-10 mb-14">
+                        
+                        <div class="relative pl-8">
+                            <div class="absolute w-4 h-4 bg-brand-500 rounded-full -left-[9px] top-1 border-4 border-brand-50 dark:border-gray-900 transition-colors duration-300"></div>
+                            <span class="text-sm font-bold text-brand-600 dark:text-brand-400 bg-brand-100 dark:bg-brand-900/30 px-3 py-1 rounded-full inline-block mb-2 transition-colors duration-300">Aug 2022 - Aug 2026</span>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">Universitas Pembangunan Nasional "Veteran" Jakarta</h4>
+                            <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mt-2 space-y-1">
+                                <li>Completed a capstone project by developing a web-based inventory information system using Laravel, PHP, and MySQL.</li>
+                                <li>Conducted requirement analysis, UML modeling, Black Box Testing, and User Acceptance Testing (UAT).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center">
+                        <i class="fas fa-users text-brand-500 mr-3"></i> Organizational Experience
+                    </h3>
+                    <p class="font-semibold text-gray-800 dark:text-gray-300 mb-6 ml-3">SENAT MAHASISWA FAKULTAS ILMU KOMPUTER</p>
+                    <div class="relative border-l-2 border-brand-200 dark:border-gray-700 ml-3 space-y-10">
+                        
+                        <div class="relative pl-8">
+                            <div class="absolute w-4 h-4 bg-brand-500 rounded-full -left-[9px] top-1 border-4 border-brand-50 dark:border-gray-900 transition-colors duration-300"></div>
+                            <span class="text-sm font-bold text-brand-600 dark:text-brand-400 bg-brand-100 dark:bg-brand-900/30 px-3 py-1 rounded-full inline-block mb-2 transition-colors duration-300">Feb 2025 - Jan 2026</span>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">Ketua Umum</h4>
+                            <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mt-2 space-y-1">
+                                <li>Leading and directing 36 members of the organization.</li>
+                                <li>Ensuring the effectiveness of the organization in carrying out its work programs.</li>
+                            </ul>
+                        </div>
+
+                        <div class="relative pl-8">
+                            <div class="absolute w-4 h-4 bg-brand-500 rounded-full -left-[9px] top-1 border-4 border-brand-50 dark:border-gray-900 transition-colors duration-300"></div>
+                            <span class="text-sm font-bold text-brand-600 dark:text-brand-400 bg-brand-100 dark:bg-brand-900/30 px-3 py-1 rounded-full inline-block mb-2 transition-colors duration-300">Feb 2024 - Feb 2025</span>
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">Wakil Kepala Komisi III</h4>
+                            <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mt-2 space-y-1">
+                                <li>Guide, direct, and manage 6 experts in carrying out the duties and functions of Commission III.</li>
+                                <li>Maintain good relations and coordination with 56 BEMF-IK members.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-20 bg-white dark:bg-gray-950 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Personal Skills</h2>
+                <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Soft/Core Skills -->
+                <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 border border-gray-100 dark:border-gray-800 hover:shadow-lg dark:hover:shadow-gray-800/30 transition-all duration-300">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center border-b dark:border-gray-700 pb-4">Core Competencies</h3>
+                    <div class="flex flex-wrap gap-3 justify-center">
+                        <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">Software Quality Assurance</span>
+                        <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">System Analyst</span>
+                        <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">System Implementation</span>
+                        <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">Analytical Thinking</span>
+                        <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">Problem Solving</span>
+                        <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">Communication</span>
+                    </div>
+                </div>
+
+                <!-- Programming & Dev -->
+                <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 border border-gray-100 dark:border-gray-800 hover:shadow-lg dark:hover:shadow-gray-800/30 transition-all duration-300">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center border-b dark:border-gray-700 pb-4">Programming</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                        <div class="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
+                            <i class="fab fa-html5 text-3xl text-orange-600"></i>
+                            <span class="font-medium text-gray-700 dark:text-gray-300">HTML5</span>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
+                            <i class="fab fa-css3-alt text-3xl text-blue-600"></i>
+                            <span class="font-medium text-gray-700 dark:text-gray-300">CSS3</span>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
+                            <i class="fab fa-js text-3xl text-yellow-400"></i>
+                            <span class="font-medium text-gray-700 dark:text-gray-300">JavaScript</span>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
+                            <i class="fab fa-php text-3xl text-indigo-500"></i>
+                            <span class="font-medium text-gray-700 dark:text-gray-300">PHP</span>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
+                            <i class="fab fa-python text-3xl text-blue-500"></i>
+                            <span class="font-medium text-gray-700 dark:text-gray-300">Python</span>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
+                            <i class="fab fa-laravel text-3xl text-red-500"></i>
+                            <span class="font-medium text-gray-700 dark:text-gray-300">Laravel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools & Software -->
+                <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 border border-gray-100 dark:border-gray-800 hover:shadow-lg dark:hover:shadow-gray-800/30 transition-all duration-300">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center border-b dark:border-gray-700 pb-4">Tools & Software</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2 font-semibold">Data</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded text-sm font-medium flex items-center transition-colors"><i class="fas fa-database mr-2 text-blue-500"></i>Pentaho</span>
+                                <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded text-sm font-medium flex items-center transition-colors"><i class="fas fa-chart-bar mr-2 text-yellow-600"></i>Power BI</span>
+                                <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded text-sm font-medium flex items-center transition-colors"><i class="fas fa-chart-pie mr-2 text-blue-400"></i>Tableau</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2 font-semibold">Design & Office</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded text-sm font-medium flex items-center transition-colors"><i class="fab fa-figma mr-2 text-pink-500"></i>Figma</span>
+                                <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded text-sm font-medium flex items-center gap-2 transition-colors">
+                                    <img src="assets/canva.jpeg" alt="Canva" class="w-5 h-5 rounded-sm object-contain flex-shrink-0">
+                                    Canva
+                                </span>
+                                <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded text-sm font-medium flex items-center gap-2 transition-colors">
+                                    <img src="assets/drawio.jpeg" alt="draw.io" class="w-5 h-5 rounded-sm object-contain flex-shrink-0">
+                                    draw.io
+                                </span>
+                                <span class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded text-sm font-medium flex items-center transition-colors"><i class="fab fa-microsoft mr-2 text-blue-600"></i>MS Office</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="portofolio" class="py-20 bg-gray-900 dark:bg-black text-white transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-white">My Portofolio</h2>
+                <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full"></div>
+                <p class="mt-4 text-gray-400">A showcase of my recent projects</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-8">
+                
+                <!-- Project 1: Web-Based Inventory Management System -->
+                <div class="w-full max-w-sm bg-gray-800 rounded-2xl overflow-hidden card-hover transition-all duration-300 border border-gray-700 flex flex-col group cursor-pointer" onclick="openModal('project1')">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="assets/project1/dashboard.png" alt="Web-Based Inventory Management System" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-white mb-3">Web-Based Inventory Management System</h3>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">Information System</span>
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">Web Development</span>
+                        </div>
+                        <div class="mt-auto">
+                            <button class="w-full py-2.5 bg-gray-700 hover:bg-brand-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center">
+                                See Details <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Student Information System Website -->
+                <div class="w-full max-w-sm bg-gray-800 rounded-2xl overflow-hidden card-hover transition-all duration-300 border border-gray-700 flex flex-col group cursor-pointer" onclick="openModal('project2')">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="assets/project2/login.png" alt="Student Information System Website" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-white mb-3">Student Information System Website</h3>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">Full Stack Development</span>
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">CRUD</span>
+                        </div>
+                        <div class="mt-auto">
+                            <button class="w-full py-2.5 bg-gray-700 hover:bg-brand-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center">
+                                See Details <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: System Analysis & UML Design for Inventory Management System -->
+                <div class="w-full max-w-sm bg-gray-800 rounded-2xl overflow-hidden card-hover transition-all duration-300 border border-gray-700 flex flex-col group cursor-pointer" onclick="openModal('project3')">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="assets/project3/activity.png" alt="System Analysis & UML Design for Inventory Management System" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-white mb-3">System Analysis & UML Design for Web-Based Inventory Management System</h3>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">System Analysis</span>
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">UML Design</span>
+                        </div>
+                        <div class="mt-auto">
+                            <button class="w-full py-2.5 bg-gray-700 hover:bg-brand-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center">
+                                See Details <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: UML Design for Motorcycle Workshop Work Order System -->
+                <div class="w-full max-w-sm bg-gray-800 rounded-2xl overflow-hidden card-hover transition-all duration-300 border border-gray-700 flex flex-col group cursor-pointer" onclick="openModal('project4')">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="assets/project4/classwo.png" alt="UML Design for Motorcycle Workshop Work Order System" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-white mb-3">UML Design for Motorcycle Workshop Work Order System</h3>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">Business Process Modeling</span>
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">UML Diagrams</span>
+                        </div>
+                        <div class="mt-auto">
+                            <button class="w-full py-2.5 bg-gray-700 hover:bg-brand-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center">
+                                See Details <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5: EcoCycle - Sustainable Waste Management Mobile App UI Design -->
+                <div class="w-full max-w-sm bg-gray-800 rounded-2xl overflow-hidden card-hover transition-all duration-300 border border-gray-700 flex flex-col group cursor-pointer" onclick="openModal('project5')">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="assets/project5/mockup.png" alt="EcoCycle mobile app" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute inset-0 bg-brand-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-white mb-3">EcoCycle - Sustainable Waste Management Mobile App UI Design</h3>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">UI/UX Design</span>
+                            <span class="bg-gray-700 text-xs px-2 py-1 rounded text-brand-300 border border-gray-600">Figma</span>
+                        </div>
+                        <div class="mt-auto">
+                            <button class="w-full py-2.5 bg-gray-700 hover:bg-brand-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center">
+                                See Details <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-950 dark:bg-[#0a0a0a] text-gray-400 py-12 text-center border-t border-gray-800 dark:border-gray-900 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-2xl font-bold text-white mb-4">Hamka Rasyiid Putra Widodo</h2>
+            <div class="flex justify-center space-x-6 mb-8">
+                <a href="https://linkedin.com/in/hamkarasyiid" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-brand-500 text-xl transition-colors"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:hamkaaarp@gmail.com" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-brand-500 text-xl transition-colors"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p class="text-sm">&copy; 2026 Hamka Rasyiid. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="project-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
+        
+        <!-- Modal Content Box -->
+        <div class="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800 modal-animate">
+            
+            <!-- Header -->
+            <div class="flex justify-between items-center p-5 md:p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/80 z-10">
+                <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white">Project Title</h3>
+                <button onclick="closeModal()" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-brand-100 hover:text-brand-500 dark:hover:bg-brand-900/50 dark:hover:text-brand-400 transition-colors focus:outline-none">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Body (Scrollable) -->
+            <div class="p-5 md:p-8 overflow-y-auto custom-scrollbar flex-grow bg-white dark:bg-gray-950">
+                
+                <!-- Category/Skills Tags -->
+                <div id="modal-tags" class="flex flex-wrap gap-2 mb-8">
+                    <!-- Dynamic tags injected here -->
+                </div>
+
+                <!-- Screenshots Grid -->
+                <div class="mb-10">
+                    <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-images mr-2 text-brand-500"></i> Gallery
+                    </h4>
+                    <div id="modal-gallery" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Dynamic images injected here -->
+                    </div>
+                </div>
+                
+                <!-- Detailed Description -->
+                <div>
+                    <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-info-circle mr-2 text-brand-500"></i> About Project
+                    </h4>
+                    <div id="modal-desc" class="text-gray-600 dark:text-gray-400 leading-relaxed space-y-4 text-base md:text-lg">
+                        <!-- Dynamic description injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Theme Toggle Logic ---
+            const themeToggleBtnDesktop = document.getElementById('theme-toggle-desktop');
+            const themeToggleBtnMobile = document.getElementById('theme-toggle-mobile');
+
+            function toggleTheme() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                }
+            }
+
+            if (themeToggleBtnDesktop) themeToggleBtnDesktop.addEventListener('click', toggleTheme);
+            if (themeToggleBtnMobile) themeToggleBtnMobile.addEventListener('click', toggleTheme);
+
+            // --- Modal/Pop-up Logic ---
+            const projectData = {
+                'project1': {
+                    title: 'Web-Based Inventory Management System',
+                    tags: ['Information System', 'Web Development', 'Laravel', 'MySQL', 'Black Box Testing', 'User Acceptance Testing'],
+                    images: [
+                        'assets/project1/login.png',
+                        'assets/project1/dashboard.png',
+                        'assets/project1/bahanbaku.png',
+                        'assets/project1/manajemenuser.png'
+                    ],
+                    desc: '<p class="text-justify">Developed a web-based inventory information system for Yulfie Collection to digitalize the management of raw material inventory and improve the efficiency of stock monitoring and transaction recording. The system was built using Laravel, PHP, MySQL, HTML, CSS, and JavaScript, providing role-based access for owners, supervisors, and warehouse staff to manage inventory operations through an intuitive and responsive interface.</p><p class="text-justify">Throughout the development process, I conducted requirement analysis, designed system workflows using UML diagrams, implemented core application features, and integrated database functionalities to support inventory transactions and reporting. To ensure software quality and alignment with business needs, the system was validated through Black Box Testing and User Acceptance Testing (UAT), confirming that all functional requirements were successfully achieved.</p>'
+                },
+                'project2': {
+                    title: 'Student Information System Website',
+                    tags: ['Full Stack Development', 'CRUD', 'HTML5', 'CSS3', 'JavaScript', 'PHP', 'MySQL'],
+                    images: [
+                        'assets/project2/login.png',
+                        'assets/project2/index.png',
+                        'assets/project2/formupdate.png',
+                        'assets/project2/updated.png'
+                    ],
+                    desc: '<p class="text-justify">Designed and developed a web-based Student Information System to digitalize student data management and improve the efficiency of academic administration. The application allows users to manage student records, including personal information, faculty, department, date of birth, gender, and GPA, through a centralized dashboard with complete CRUD functionality.</p><p class="text-justify">The system was developed using PHP, MySQL, HTML, CSS, JavaScript, and Bootstrap, following a structured development approach from database design to user interface implementation. This project strengthened my understanding of web application architecture, relational databases, input validation, and software development principles while enhancing my skills in problem-solving, system analysis, and building reliable information systems.</p>'
+                },
+                'project3': {
+                    title: 'System Analysis & UML Design for Inventory Management System',
+                    tags: ['System Analysis', 'UML Design', 'Requirement Analysis', 'Software Development Lifecycle'],
+                    images: [
+                        'assets/project3/activity.png',
+                        'assets/project3/usecase.png',
+                        'assets/project3/sequence.png',
+                        'assets/project3/class.png'
+                    ],
+                    desc: '<p class="text-justify">Designed comprehensive system documentation to support the development of a web-based raw material inventory information system for Yulfie Collection. The analysis process began with identifying business requirements and translating them into structured system models using UML. The documentation provides a clear representation of user interactions, business processes, system workflows, and data relationships to ensure the application aligns with operational needs.</p><p class="text-justify">The project includes Use Case Diagrams to define user roles and system functionalities, Activity Diagrams to illustrate business process flows, Sequence Diagrams to model interactions between users, the system, and the database, and Class Diagrams to design the application’s data structure and relationships. These UML artifacts served as the foundation for implementing the system, improving development consistency, maintainability, and communication throughout the software development lifecycle.</p>'
+                },
+                'project4': {
+                    title: 'UML Design for Motorcycle Workshop Work Order System',
+                    tags: ['Business Process Modeling', 'UML Diagrams', 'System Analysis', 'Requirement Analysis'],
+                    images: [
+                        'assets/project4/activitywo.png',
+                        'assets/project4/usecasewo.png',
+                        'assets/project4/sequencewo.png',
+                        'assets/project4/classwo.png'
+                    ],
+                    desc: '<p class="text-justify">Conducted system analysis and developed comprehensive UML documentation for a motorcycle workshop work order management system. The project focused on analyzing business processes involved in customer registration, work order creation, service status updates, spare part management, payment processing, and warranty handling. Business requirements were translated into structured system models to improve workflow clarity and support future system development.</p><p class="text-justify">The documentation includes Use Case Diagrams to identify user roles and system functionalities, Activity Diagrams to model business workflows, Sequence Diagrams to illustrate interactions between users, application components, and the database, and Class Diagrams to design the system architecture and data relationships. This project strengthened my understanding of business process analysis, object-oriented modeling, and software design documentation within the Software Development Life Cycle (SDLC).</p>'
+                },
+                'project5': {
+                    title: 'EEcoCycle - Sustainable Waste Management Mobile App UI Design',
+                    tags: ['UI/UX Design', 'Figma', 'User Interface', 'Mobile App Design', 'User-Centered Design'],
+                    images: [
+                        'assets/project5/mockup.png',
+                        'assets/project5/page1.png',
+                        'assets/project5/page2.png'
+                    ],
+                    desc: '<p class="text-justify">Designed and prototyped a high-fidelity mobile user interface for EcoCycle using Figma. The visual design strategy utilizes an earthy color palette of greens and warm oranges to align with the application\'s focus on environmental sustainability. The interface prioritizes clean layouts, custom iconography, and clear typography to ensure an intuitive user experience. Structured card layouts were implemented to effectively display recycling incentives and educational materials without overwhelming the user visually.</p><p class="text-justify">The design process involved mapping the complete user journey through various detailed screens. This includes an accessible onboarding sequence, a comprehensive main dashboard, and interactive map interfaces for location selection. The project required designing specific user flows for features such as EcoTruck and EcoBike waste pickups, profile management, and a QRIS payment gateway integration to visualize the reward system. This project demonstrated my ability to establish strong visual hierarchies, apply mobile-first design principles, and create functional prototypes that translate conceptual ideas into structured visual solutions.</p>'
+                }
+            };
+
+            const modal = document.getElementById('project-modal');
+            
+            // Function to open modal
+            window.openModal = function(projectId) {
+                const data = projectData[projectId];
+                if(!data) return;
+                const galleryImageClass = projectId === 'project3' || projectId === 'project4'
+                    ? 'w-full h-48 md:h-64 object-contain bg-gray-100 dark:bg-gray-800 p-2 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:opacity-90 transition-opacity'
+                    : 'w-full h-48 md:h-64 object-cover rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:opacity-90 transition-opacity';
+
+                // Populate Content
+                document.getElementById('modal-title').innerText = data.title;
+                document.getElementById('modal-desc').innerHTML = data.desc;
+                
+                const tagsContainer = document.getElementById('modal-tags');
+                tagsContainer.innerHTML = data.tags.map(tag => 
+                    `<span class="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-1.5 rounded-full text-sm font-semibold">${tag}</span>`
+                ).join('');
+                
+                const galleryContainer = document.getElementById('modal-gallery');
+                galleryContainer.innerHTML = data.images.map(img => 
+                    `<img src="${img}" alt="Screenshot" class="${galleryImageClass}">`
+                ).join('');
+
+                // Display Modal
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                
+                // Animate fade in
+                void modal.offsetWidth; // Trigger reflow
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                
+                // Prevent background scrolling
+                document.body.style.overflow = 'hidden';
+            };
+
+            // Function to close modal
+            window.closeModal = function() {
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    document.body.style.overflow = 'auto'; // Restore scrolling
+                }, 300);
+            };
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    window.closeModal();
+                }
+            });
+
+            // --- Mobile Menu Logic ---
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const menuIcon = btn ? btn.querySelector('i') : null;
+
+            if (btn && menu && menuIcon) {
+                btn.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                    if (menu.classList.contains('hidden')) {
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    } else {
+                        menuIcon.classList.remove('fa-bars');
+                        menuIcon.classList.add('fa-times');
+                    }
+                });
+
+                // Close mobile menu when a link is clicked
+                const mobileLinks = menu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.add('hidden');
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    });
+                });
+            }
+
+            // --- Navbar Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 20) {
+                        navbar.classList.add('shadow-md', 'bg-white/95', 'dark:bg-gray-900/95');
+                        navbar.classList.remove('shadow-sm', 'bg-white/90', 'dark:bg-gray-900/90');
+                    } else {
+                        navbar.classList.add('shadow-sm', 'bg-white/90', 'dark:bg-gray-900/90');
+                        navbar.classList.remove('shadow-md', 'bg-white/95', 'dark:bg-gray-900/95');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
